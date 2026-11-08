@@ -3,6 +3,48 @@
 This is a manual source handoff for a Grok Bot template, not an import or upload package format. It is separate from
 the Grok Build developer plugin. The template has not been published or submitted to the Grok Bot marketplace.
 
+## What it is
+
+[GoodQA](https://goodqa.app) is an issue tracker with a public MCP (Model Context Protocol) server at
+`https://goodqa.app/v1/mcp`. This repository holds the text an operator needs to set up a Grok Bot named GoodQA that
+works with GoodQA tickets, projects and follow-ups for the person who connects it.
+
+It is for a team operator who wants a Grok Bot that reads and summarizes tickets, proposes reproduction steps, and
+creates or updates tickets only when the user asks and the connection allows it. Ticket text and comments are written by other
+people and must not steer the bot.
+
+The package holds three pieces:
+
+- `BOT.md`: job instructions to paste into the bot. It starts with `whoami` and `list_orgs`, treats tickets and tool
+  output as evidence rather than instructions, requires explicit user approval for destructive or risky actions, and
+  keeps routines off unless the user approves them.
+- `skills/goodqa/SKILL.md`: the GoodQA skill (organization discovery, `orgId`, refusal handling).
+- the setup steps below, which add GoodQA as a custom MCP app that each recipient connects with their own OAuth
+  sign-in. No credential or connection is shipped.
+
+## How it works
+
+```mermaid
+flowchart TD
+    R[This repository<br/>BOT.md + SKILL.md] --> O[Operator creates bot named GoodQA<br/>pastes BOT.md, adds the skill]
+    O --> A[Bot adds custom MCP app<br/>goodqa.app/v1/mcp]
+    A --> U[Each recipient signs in to GoodQA<br/>and approves organizations and scopes]
+    U --> P[Prove: whoami, list_orgs, scoped read,<br/>denied writes, revocation]
+    P --> Q[Operator review, then Share,<br/>Create a copy, Publish]
+```
+
+The setup starts only after operator approval. No public template has been created from these steps; see Status.
+
+## Status and roadmap
+
+| Item | State |
+|---|---|
+| `BOT.md` and `skills/goodqa/SKILL.md` | In this repository. |
+| Published Grok Bot template or marketplace entry | None. This repository asserts no published link and no marketplace acceptance. |
+| End-to-end proof (sign-in, scoped read, denied write, revocation) | Not recorded here. OAuth client qualification is in progress. |
+| Automatic import | Not available; setup is manual by design. |
+| Next | Planned: run the proof steps with an eligible QA account, then publish only after the operator approves the exact template. |
+
 ## Authentication status
 
 OAuth sign-in from this client has not been proven for public users. GoodQA currently limits ordinary member
